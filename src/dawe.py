@@ -24,7 +24,7 @@ class DaweDraft:
         self.manager = manager
         pass
     def init(self ):
-
+        
         while True:
             try:
                 dawe_data = json.loads(self.dawe_socket.recv())['newState']
