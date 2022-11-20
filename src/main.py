@@ -72,12 +72,18 @@ def download_data(game_version):
     os.mkdir(f"{CACHE_DIRECTORY}/{game_version}")
     os.mkdir(f"{CACHE_DIRECTORY}/{game_version}/champion")
 
-    champ_data = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{game_version}/data/en_US/champion.json").json()
-
-    for champ in champ_data["data"]:
+    champ_data = requests.get(f"http://ddragon.leagueoflegends.com/cdn/{game_version}/data/en_US/champion.json").json()["data"]
+    print(champ_data)
+    for champ in champ_data:
         print(champ)
         champ_id = champ_data[champ]["id"]
-        wget.download(f"https://ddragon.leagueoflegends.com/cdn/img/champion/centered/{champ_id}_0.jpg", out=f"{CACHE_DIRECTORY}/{game_version}/champion/{champ_id}_centered_splash.jpg")
+        print(champ_id)
+        # TODO: https://github.com/RiotGames/developer-relations/issues/693 -> Temporal fix waiting for official response
+        if champ_id == 'Fiddlesticks':
+            wget.download(f"https://ddragon.leagueoflegends.com/cdn/img/champion/centered/FiddleSticks_0.jpg", out=f"{CACHE_DIRECTORY}/{game_version}/champion/{champ_id}_centered_splash.jpg")
+        else:
+            wget.download(f"https://ddragon.leagueoflegends.com/cdn/img/champion/centered/{champ_id}_0.jpg", out=f"{CACHE_DIRECTORY}/{game_version}/champion/{champ_id}_centered_splash.jpg")
+        # # #
         wget.download(f"https://ddragon.leagueoflegends.com/cdn/img/champion/loading/{champ_id}_0.jpg", out=f"{CACHE_DIRECTORY}/{game_version}/champion/{champ_id}_loading.jpg")
         wget.download(f"https://ddragon.leagueoflegends.com/cdn/img/champion/splash/{champ_id}_0.jpg", out=f"{CACHE_DIRECTORY}/{game_version}/champion/{champ_id}_splash.jpg")
         wget.download(f"https://ddragon.leagueoflegends.com/cdn/{game_version}/img/champion/{champ_id}.png", out=f"{CACHE_DIRECTORY}/{game_version}/champion/{champ_id}_square.png")
